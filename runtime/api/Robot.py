@@ -1,8 +1,16 @@
 # ------
-# Robot.py class 
+# Robot.py class
 # This runs the robot.
 # Copyright 2015. Pioneers in Engineering.
 # ------
+'''
+This module contains functions for reading data from the robot, and for
+manipulating the robot.
+
+To use this module, you must first import it:
+
+>>> from api import Robot
+'''
 import memcache
 
 memcache_port = 12357
@@ -37,6 +45,9 @@ def set_motor(name, value):
 # TODO: implement
 def get_sensor(name):
     """Returns the value, or reading corresponding to the specified sensor.
+
+    :param name: A string that identifies the sensor.
+    :returns: The reading of the sensor at the current point in time.
     """
     all_data = mc.get('sensor_values')
     if name in all_data:
@@ -47,3 +58,15 @@ def get_all_motors():
     """Returns the current power values for every connected motor.
     """
     return mc.get('motor_values')
+
+def read_encoder(name):
+    """Returns the encoder reading of the specified motor.
+
+    :para name: A string that identifies the motor
+    :returns: The reading of the encoder at the current point in time
+    """
+    UID = _lookup(name)
+    try:
+        return  mc.get('encoder_values')[UID]
+    except KeyError:
+        raise KeyError("No motor with that name")

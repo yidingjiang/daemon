@@ -132,6 +132,11 @@ def send_peripheral_data(data):
         }
     })
 
+def update_encoder_values():
+    new_encoder_val = {}
+    for motor in name_to_grizzly:
+        new_encoder_val[motor] = name_to_grizzly[name].read_encoder()
+    return new_encoder_val
 
 while True:
     msg = ansible.recv()
@@ -142,8 +147,10 @@ while True:
     
     # Update sensor values, and send to UI
     all_sensor_data = get_all_data(connectedDevices)
+    all_encoder_data = update_encoder_values()
     send_peripheral_data(all_sensor_data)
     mc.set('sensor_values', all_sensor_data)
+    mc.set('encoder_values', all_encoder_data)
 
     # Send motor values to UI, if the robot is running
     if robot_status:
