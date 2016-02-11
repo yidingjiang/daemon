@@ -1,6 +1,6 @@
 import React from 'react';
 import InlineEdit from 'react-edit-inline';
-import RobotActions from '../../actions/RobotActions';
+import Ansible from '../../utils/Ansible';
 
 var NameEdit = React.createClass({
   propTypes: {
@@ -8,12 +8,16 @@ var NameEdit = React.createClass({
     id: React.PropTypes.string
   },
   dataChange(data) {
-    RobotActions.updatePeripheralName(this.props.id, data.name);
+    Ansible.sendMessage('custom_names', {
+      id: this.props.id,
+      name: data.name
+    });
   },
   render() {
     return (
       <div>
         <InlineEdit
+          className="static"
           activeClassName="editing"
           text={this.props.name}
           change={this.dataChange}
@@ -24,15 +28,12 @@ var NameEdit = React.createClass({
             display: 'inline-block',
             margin: 0,
             padding: 0,
-            fontSize:15,
-            outline: 0,
-            border: 0
+            fontSize:15
           }}
         />
       </div>
     );
   }
 });
-  
 
 export default NameEdit;
